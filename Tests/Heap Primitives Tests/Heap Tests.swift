@@ -22,6 +22,9 @@ import Testing
 private struct Job: ~Copyable, Comparison.`Protocol` {
     let priority: Int
     init(_ priority: Int) { self.priority = priority }
+}
+
+extension Job {
     static func < (lhs: borrowing Self, rhs: borrowing Self) -> Bool {
         lhs.priority < rhs.priority
     }
@@ -36,11 +39,16 @@ private struct Job: ~Copyable, Comparison.`Protocol` {
 // element (Copyable or not). Observations are bound to locals before `#expect` — the
 // property-access `#expect` form would otherwise require the move-only value to copy.
 
-@Suite("Heap (binary min priority queue)")
-struct HeapTests {
+@Suite
+struct `Heap Tests` {
+    @Suite struct Unit {}
+    @Suite struct `Edge Case` {}
+    @Suite struct Integration {}
+}
 
-    @Test("empty heap reports isEmpty and count 0")
-    func emptyState() {
+extension `Heap Tests`.Unit {
+    @Test
+    func `empty heap reports isEmpty and count 0`() {
         let heap = Heap<Int>()
         let empty = heap.isEmpty
         let count = heap.count
@@ -48,8 +56,8 @@ struct HeapTests {
         #expect(count == Index<Int>.Count(0))
     }
 
-    @Test("push then pop yields elements in ascending (min-first) order")
-    func minOrdering() {
+    @Test
+    func `push then pop yields elements in ascending (min-first) order`() {
         var heap = Heap<Int>()
         for value in [42, 3, 25, 7, 3, 19] { heap.push(value) }
         let nonEmpty = !heap.isEmpty
@@ -68,8 +76,8 @@ struct HeapTests {
         #expect(overDrain == nil)
     }
 
-    @Test("min tracks the running minimum as elements arrive")
-    func runningMinimum() {
+    @Test
+    func `min tracks the running minimum as elements arrive`() {
         var heap = Heap<Int>()
         heap.push(9)
         let m0 = heap.min
@@ -89,8 +97,26 @@ struct HeapTests {
         #expect(m4 == 4)
     }
 
-    @Test("single-element heap: push, min, pop")
-    func singleElement() {
+    @Test
+    func `Copyable elements flow through push, pop, and min`() {
+        var heap = Heap<Job>()
+        heap.push(Job(5))
+        heap.push(Job(1))
+        heap.push(Job(3))
+        let peeked = heap.min.priority
+        #expect(peeked == 1)
+        // Consuming-unwrap the `~Copyable` Job? each pop (no borrow of Element?).
+        var priorities: [Int] = []
+        while let job = heap.pop() { priorities.append(job.priority) }
+        let empty = heap.isEmpty
+        #expect(priorities == [1, 3, 5])
+        #expect(empty)
+    }
+}
+
+extension `Heap Tests`.`Edge Case` {
+    @Test
+    func `single element heap: push, min, pop`() {
         var heap = Heap<Int>()
         heap.push(17)
         let count = heap.count
@@ -105,24 +131,8 @@ struct HeapTests {
         #expect(overDrain == nil)
     }
 
-    @Test("~Copyable elements flow through push/pop/min")
-    func moveOnlyElements() {
-        var heap = Heap<Job>()
-        heap.push(Job(5))
-        heap.push(Job(1))
-        heap.push(Job(3))
-        let peeked = heap.min.priority
-        #expect(peeked == 1)
-        // Consuming-unwrap the `~Copyable` Job? each pop (no borrow of Element?).
-        var priorities: [Int] = []
-        while let job = heap.pop() { priorities.append(job.priority) }
-        let empty = heap.isEmpty
-        #expect(priorities == [1, 3, 5])
-        #expect(empty)
-    }
-
-    @Test("growth past the initial capacity preserves the heap invariant")
-    func growthPreservesInvariant() {
+    @Test
+    func `growth past the initial capacity preserves the heap invariant`() {
         var heap = Heap<Int>(minimumCapacity: Index<Int>.Count(2))
         // Push descending so nearly every insert sifts to the root, forcing regrowth.
         for value in stride(from: 64, through: 1, by: -1) { heap.push(value) }

@@ -74,7 +74,9 @@ public struct __Heap<S: ~Copyable>: ~Copyable {
     /// Wraps an existing column.
     @inlinable
     public init(column: consuming S) { self.column = column }
+}
 
+extension __Heap where S: ~Copyable {
     /// Consumes the heap, yielding its storage column.
     @inlinable
     public consuming func take() -> S { column }

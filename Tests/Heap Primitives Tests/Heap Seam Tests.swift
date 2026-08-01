@@ -32,11 +32,16 @@ import Testing
 private typealias HeapColumn<E: ~Copyable> =
     Buffer<Storage<Memory.Allocator<Memory.Heap>>.Contiguous<E>>.Linear
 
-@Suite("Heap seam laws")
-struct HeapSeamTests {
+@Suite
+struct `Heap Seam Tests` {
+    @Suite struct Unit {}
+    @Suite struct `Edge Case` {}
+    @Suite struct Integration {}
+}
 
-    @Test("[DS-024] Seam.Ledger laws hold for the canonical Heap column")
-    func canonicalColumnLedgerLaws() {
+extension `Heap Seam Tests`.Integration {
+    @Test
+    func `DS-024 Seam Ledger laws hold for the canonical Heap column`() {
         let violations = Seam.Ledger.violations(
             makeEmpty: { HeapColumn<Int>(minimumCapacity: Index<Int>.Count(4)) },
             element: { $0 }
