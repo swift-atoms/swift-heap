@@ -10,6 +10,7 @@
 // ===----------------------------------------------------------------------===//
 
 import Testing
+
 @testable import Heap_Primitives
 
 // MARK: - Differential test vs a plain-array oracle (template law: adt-tower.md:1247)
