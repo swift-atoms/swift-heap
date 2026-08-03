@@ -124,16 +124,21 @@ where
         Index(Ordinal(UInt(k)))
     }
 
-    /// Exchanges two initialized slots through the seam's move/initialize transitions.
+    /// Exchanges two initialized slots through the seam's `swapAt(_:_:)` witness.
+    ///
+    /// Routed through `swapAt(_:_:)` rather than the raw `move(at:)` /
+    /// `initialize(at:to:)` pair: those two are trailing-slot-only on
+    /// `Buffer.Linear` (fable-448/F-004), so composing an interior exchange
+    /// from them traps on any non-trailing slot
+    /// (swift-buffer-linear-primitives#3). `swapAt(_:_:)` is the seam's own
+    /// requirement and each conformer witnesses it lawfully for its own
+    /// discipline.
     ///
     /// - Precondition: the caller must have gated `unshare()` (CoW
     ///   uniqueness) before invoking — this helper mutates the column in place.
     @inlinable
     package mutating func exchange(_ i: Index<S.Element>, _ j: Index<S.Element>) {
-        let a = column.move(at: i)
-        let b = column.move(at: j)
-        column.initialize(at: i, to: b)
-        column.initialize(at: j, to: a)
+        column.swapAt(i, j)
     }
 
     /// Restores the heap invariant upward from raw slot `k`.
@@ -185,9 +190,12 @@ where
         if n == 0 { return nil }
         column.unshare()
         if n == 1 { return column.move(at: slot(0)) }
-        let root = column.move(at: slot(0))
-        let last = column.move(at: slot(n - 1))
-        column.initialize(at: slot(0), to: last)
+        // Root (slot 0) is not the trailing slot when n > 1, so it cannot be
+        // moved directly (Buffer.Linear's move/initialize are trailing-slot-only;
+        // see `exchange` above). Swap root into the trailing slot via the seam's
+        // lawful `swapAt(_:_:)` witness, then retract from there.
+        column.swapAt(slot(0), slot(n - 1))
+        let root = column.move(at: slot(n - 1))
         siftDown(over: n - 1)
         return root
     }
