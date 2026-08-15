@@ -215,7 +215,10 @@ extension __Heap where S: ~Copyable {
 
     /// Inserts an element (grow-if-full rides the column's own R-generic append).
     @inlinable
-    public mutating func push<E: ~Copyable & Comparison.`Protocol`, Resource: Memory.Growable & ~Copyable>(
+    public mutating func push<
+        E: ~Copyable & Comparison.`Protocol`,
+        Resource: Memory.Growable & ~Copyable
+    >(
         _ element: consuming E
     ) where S == Buffer<Storage<Memory.Allocator<Resource>>.Contiguous<E>>.Linear {
         column.append(element)
@@ -224,7 +227,6 @@ extension __Heap where S: ~Copyable {
         // last element. No typed Cardinal/Ordinal "last slot" helper exists in
         // Index_Primitives — escalating per [INFRA-025] rather than inventing one
         // ad hoc (swift-stack-primitives Stack.swift:118 mirrors this shape).
-        // swiftlint:disable:next cardinal_count_minus_one_evasion
         siftUp(from: Int(clamping: count) - 1)
     }
 }
