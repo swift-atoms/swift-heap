@@ -37,7 +37,7 @@
 public import Buffer_Linear_Primitive
 public import Buffer_Primitive
 public import Buffer_Protocol_Primitives
-public import Comparison_Primitives
+import Comparison_Primitives
 public import Index_Primitives
 public import Memory_Allocator_Primitive
 public import Memory_Allocator_Protocol_Primitives
