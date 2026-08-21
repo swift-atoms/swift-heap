@@ -1,24 +1,9 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-primitives open source project
-//
-// Copyright (c) 2024-2026 Coen ten Thije Boonkkamp and the swift-primitives project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 import Comparison_Primitives
 import Index_Primitives
 import Testing
 
 @testable import Heap_Primitives
 
-// MARK: - Fixtures
-
-/// A move-only element that conforms `Comparison.Protocol` (the borrowing `<`),
-/// proving the tower carries `~Copyable` elements through push/pop/min.
 private struct Job: ~Copyable, Comparison.`Protocol` {
     let priority: Int
     init(_ priority: Int) { self.priority = priority }
@@ -32,12 +17,6 @@ extension Job {
         lhs.priority == rhs.priority
     }
 }
-
-// MARK: - Heap (binary MIN priority queue — the ADT-tower W2 shape)
-//
-// The canonical `Heap<E>` rides the DIRECT heap column, so it is MOVE-ONLY for every
-// element (Copyable or not). Observations are bound to locals before `#expect` — the
-// property-access `#expect` form would otherwise require the move-only value to copy.
 
 @Suite
 struct `Heap Tests` {
@@ -70,7 +49,7 @@ extension `Heap Tests`.Unit {
         var drained: [Int] = []
         while let next = heap.pop() { drained.append(next) }
         let empty = heap.isEmpty
-        let overDrain = heap.pop()  // pop on empty -> nil (the convention)
+        let overDrain = heap.pop()
         #expect(drained == [3, 3, 7, 19, 25, 42])
         #expect(empty)
         #expect(overDrain == nil)
@@ -93,7 +72,7 @@ extension `Heap Tests`.Unit {
         #expect(m3 == 1)
         let popped = heap.pop()
         let m4 = heap.min
-        #expect(popped == 1)  // Int? == Int-literal (Optional promotion)
+        #expect(popped == 1)
         #expect(m4 == 4)
     }
 
@@ -105,7 +84,7 @@ extension `Heap Tests`.Unit {
         heap.push(Job(3))
         let peeked = heap.min.priority
         #expect(peeked == 1)
-        // Consuming-unwrap the `~Copyable` Job? each pop (no borrow of Element?).
+
         var priorities: [Int] = []
         while let job = heap.pop() { priorities.append(job.priority) }
         let empty = heap.isEmpty
@@ -134,7 +113,7 @@ extension `Heap Tests`.`Edge Case` {
     @Test
     func `growth past the initial capacity preserves the heap invariant`() {
         var heap = Heap<Int>(minimumCapacity: Index<Int>.Count(2))
-        // Push descending so nearly every insert sifts to the root, forcing regrowth.
+
         for value in stride(from: 64, through: 1, by: -1) { heap.push(value) }
         let count = heap.count
         #expect(count == Index<Int>.Count(64))

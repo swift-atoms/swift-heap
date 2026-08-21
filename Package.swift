@@ -12,21 +12,15 @@ let package = Package(
         .visionOS(.v27),
     ],
     products: [
-        // MARK: - Base (ADT-tower W2 shape: carrier `__Heap<S>` + front door `Heap<E>`)
+
         .library(name: "Heap Primitive", targets: ["Heap Primitive"]),
         .library(name: "Heap Primitives", targets: ["Heap Primitives"]),
 
-        // MARK: - Test Support
         .library(name: "Heap Primitives Test Support", targets: ["Heap Primitives Test Support"]),
 
-        // NOTE (ADT-tower W2, 2026-07-02): the Min / Max single-ended stub targets are
-        // DELETED (non-functional `fatalError` placeholders; min IS the canonical `Heap`).
-        // `Heap.MinMax` is PARKED under "Experiments/Heap MinMax (parked)/" as a future
-        // sibling for the heap-template round (retained in-tree, out of the build graph —
-        // see that directory's README.md).
     ],
     dependencies: [
-        // Carrier + front door (Heap Primitive):
+
         .package(
             url: "https://github.com/swift-primitives/swift-comparison-primitives.git",
             branch: "main"
@@ -55,7 +49,7 @@ let package = Package(
             url: "https://github.com/swift-primitives/swift-memory-heap-primitives.git",
             branch: "main"
         ),
-        // Test support:
+
         .package(
             url: "https://github.com/swift-primitives/swift-collection-primitives.git",
             branch: "main"
@@ -71,14 +65,13 @@ let package = Package(
     ],
     targets: [
 
-        // MARK: - Carrier + front door (the ADT-tower W2 core)
         .target(
             name: "Heap Primitive",
             dependencies: [
-                // Seams (D3): the generic mutate + observability surfaces the ops ride.
+
                 .product(name: "Store Protocol Primitives", package: "swift-storage-primitives"),
                 .product(name: "Buffer Protocol Primitives", package: "swift-buffer-primitives"),
-                // Column vocabulary: the default direct heap-allocated linear column.
+
                 .product(name: "Buffer Primitive", package: "swift-buffer-primitives"),
                 .product(
                     name: "Buffer Linear Primitive",
@@ -90,7 +83,7 @@ let package = Package(
                     package: "swift-storage-primitives"
                 ),
                 .product(name: "Memory Heap Primitives", package: "swift-memory-heap-primitives"),
-                // Allocation-generic growth pin ([DS-029] form-2: `Resource: Memory.Growable`).
+
                 .product(
                     name: "Memory Allocator Primitive",
                     package: "swift-memory-allocation-primitives"
@@ -99,13 +92,12 @@ let package = Package(
                     name: "Memory Allocator Protocol Primitives",
                     package: "swift-memory-allocation-primitives"
                 ),
-                // Element ordering + typed slots.
+
                 .product(name: "Comparison Primitives", package: "swift-comparison-primitives"),
                 .product(name: "Index Primitives", package: "swift-index-primitives"),
             ]
         ),
 
-        // MARK: - Umbrella ([MOD-005]): re-exports the carrier module.
         .target(
             name: "Heap Primitives",
             dependencies: [
@@ -113,7 +105,6 @@ let package = Package(
             ]
         ),
 
-        // MARK: - Tests
         .testTarget(
             name: "Heap Primitives Tests",
             dependencies: [
@@ -123,7 +114,6 @@ let package = Package(
             ]
         ),
 
-        // MARK: - Test Support
         .target(
             name: "Heap Primitives Test Support",
             dependencies: [
