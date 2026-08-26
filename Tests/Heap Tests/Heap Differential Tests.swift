@@ -1,6 +1,6 @@
 import Testing
 
-@testable import Heap_Primitives
+@testable import Heap
 
 private struct SplitMix64: RandomNumberGenerator {
     var state: UInt64

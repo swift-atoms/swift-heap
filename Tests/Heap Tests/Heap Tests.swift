@@ -1,8 +1,8 @@
-import Comparison_Primitives
-import Index_Primitives
+import Comparison
+import Index
 import Testing
 
-@testable import Heap_Primitives
+@testable import Heap
 
 private struct Job: ~Copyable, Comparison.`Protocol` {
     let priority: Int
