@@ -1,8 +1,10 @@
 import Comparison
 import Index
+import Storage
 import Testing
 
 @testable import Heap
+import Heap_Test_Support
 
 private struct Job: ~Copyable, Comparison.`Protocol` {
     let priority: Int
@@ -28,7 +30,7 @@ struct `Heap Tests` {
 extension `Heap Tests`.Unit {
     @Test
     func `empty heap reports isEmpty and count 0`() {
-        let heap = Heap<Int>()
+        let heap = InlineHeap<Int, 128>(column: Store.Inline())
         let empty = heap.isEmpty
         let count = heap.count
         #expect(empty)
@@ -37,7 +39,7 @@ extension `Heap Tests`.Unit {
 
     @Test
     func `push then pop yields elements in ascending (min-first) order`() {
-        var heap = Heap<Int>()
+        var heap = InlineHeap<Int, 128>(column: Store.Inline())
         for value in [42, 3, 25, 7, 3, 19] { heap.push(value) }
         let nonEmpty = !heap.isEmpty
         let count = heap.count
@@ -57,7 +59,7 @@ extension `Heap Tests`.Unit {
 
     @Test
     func `min tracks the running minimum as elements arrive`() {
-        var heap = Heap<Int>()
+        var heap = InlineHeap<Int, 128>(column: Store.Inline())
         heap.push(9)
         let m0 = heap.min
         #expect(m0 == 9)
@@ -77,8 +79,8 @@ extension `Heap Tests`.Unit {
     }
 
     @Test
-    func `Copyable elements flow through push, pop, and min`() {
-        var heap = Heap<Job>()
+    func `Move-only elements flow through push, pop, and min`() {
+        var heap = InlineHeap<Job, 8>(column: Store.Inline())
         heap.push(Job(5))
         heap.push(Job(1))
         heap.push(Job(3))
@@ -95,8 +97,25 @@ extension `Heap Tests`.Unit {
 
 extension `Heap Tests`.`Edge Case` {
     @Test
+    func `reading minimum from an empty heap traps`() async {
+        await #expect(processExitsWith: .failure) {
+            let heap = InlineHeap<Int, 1>(column: Store.Inline())
+            _ = heap.min
+        }
+    }
+
+    @Test
+    func `pushing beyond column capacity traps`() async {
+        await #expect(processExitsWith: .failure) {
+            var heap = InlineHeap<Int, 1>(column: Store.Inline())
+            heap.push(1)
+            heap.push(2)
+        }
+    }
+
+    @Test
     func `single element heap: push, min, pop`() {
-        var heap = Heap<Int>()
+        var heap = InlineHeap<Int, 8>(column: Store.Inline())
         heap.push(17)
         let count = heap.count
         let minimum = heap.min
@@ -111,8 +130,8 @@ extension `Heap Tests`.`Edge Case` {
     }
 
     @Test
-    func `growth past the initial capacity preserves the heap invariant`() {
-        var heap = Heap<Int>(minimumCapacity: Index<Int>.Count(2))
+    func `filling inline capacity preserves the heap invariant`() {
+        var heap = InlineHeap<Int, 64>(column: Store.Inline())
 
         for value in stride(from: 64, through: 1, by: -1) { heap.push(value) }
         let count = heap.count

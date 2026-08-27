@@ -17,8 +17,8 @@ let package = Package(
             targets: ["Heap"]
         ),
         .library(
-            name: "Heap Standard Library Integration",
-            targets: ["Heap Standard Library Integration"]
+            name: "Heap Test Support",
+            targets: ["Heap Test Support"]
         ),
         .library(
             name: "Heap Apple Foundation Integration",
@@ -54,19 +54,22 @@ let package = Package(
             ]
         ),
         .target(
-            name: "Heap Standard Library Integration",
+            name: "Heap Test Support",
             dependencies: ["Heap"]
         ),
         .target(
             name: "Heap Apple Foundation Integration",
-            dependencies: [
-                "Heap",
-                "Heap Standard Library Integration",
-            ]
+            dependencies: ["Heap"]
         ),
         .testTarget(
             name: "Heap Tests",
-            dependencies: ["Heap"]
+            dependencies: [
+                "Heap",
+                "Heap Test Support",
+                .product(name: "Comparison", package: "swift-comparison"),
+                .product(name: "Index", package: "swift-index"),
+                .product(name: "Storage", package: "swift-storage"),
+            ]
         ),
     ],
     swiftLanguageModes: [.v6]
