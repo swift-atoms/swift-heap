@@ -1,75 +1,95 @@
-# swift-heap
+# Heap
 
-A storage-generic minimum binary heap for move-only and copyable elements.
+![Development Status](https://img.shields.io/badge/status-active--development-blue.svg)
+[![CI](https://github.com/swift-molecules/swift-heap/actions/workflows/ci.yml/badge.svg)](https://github.com/swift-molecules/swift-heap/actions/workflows/ci.yml)
 
-The core operates over a current `Store.Ledgered.Protocol` column. It owns the heap ordering and logical-count invariant while the caller chooses the storage allocation strategy. Reading the minimum is O(1); insertion and removal are O(log n).
+`Heap<Element>` — a binary heap (priority queue) with configurable ordering. Insertion and removal of the priority element are O(log n); reading the priority element is O(1). The ordering passed at construction decides whether the minimum or the maximum element has highest priority, so one type serves as both a min-heap and a max-heap.
+
+`Heap` carries any element that defines a comparison, including move-only (`~Copyable`) ones — elements are stored and surfaced by ownership transfer, never an implicit copy. It is the canonical heap; the binary structure is an implementation detail behind the priority-queue surface.
+
+---
+
+## Key Features
+
+- **Min or max from one type** — `Heap(order: .ascending)` is a min-heap, `.descending` a max-heap.
+- **O(log n) push / pop, O(1) peek** — standard binary-heap performance.
+- **Move-only elements** — `~Copyable` elements supported; push/pop transfer ownership.
+- **Comparison-driven** — orders any element that conforms to the comparison capability.
+
+---
+
+## Quick Start
+
+```swift
+import Heap
+
+var minHeap = Heap<Int>(order: .ascending)   // min-heap
+minHeap.push(42)
+minHeap.push(7)
+let top = minHeap.peek            // Optional(7) — O(1), the priority element
+let removed = try minHeap.pop()   // 7 — O(log n)
+```
+
+---
 
 ## Installation
 
-Add the package from its canonical atom home:
+Add the dependency to your `Package.swift`:
 
 ```swift
 dependencies: [
-    .package(
-        url: "https://github.com/swift-atoms/swift-heap.git",
-        branch: "main"
-    ),
+    .package(url: "https://github.com/swift-molecules/swift-heap.git", branch: "main")
 ]
 ```
 
-Then depend on the core product:
+Add the product to your target:
 
 ```swift
 .target(
     name: "App",
     dependencies: [
-        .product(name: "Heap", package: "swift-heap"),
+        .product(name: "Heap", package: "swift-heap")
     ]
 )
 ```
 
-## Usage
+The package is pre-1.0 — depend on `branch: "main"` until `0.1.0` is tagged. Requires Swift 6.3 and macOS 26 / iOS 26 / tvOS 26 / watchOS 26 / visionOS 26 (or the corresponding Linux / Windows toolchain).
 
-`Heap` is generic over its storage column. For example, a bounded inline heap uses `Store.Inline`:
+---
 
-```swift
-import Heap
-import Storage
+## Architecture
 
-typealias Queue = Heap<Store.Inline<Int, 64>>
+| Product | Contents | When to import |
+|---------|----------|----------------|
+| `Heap` | Umbrella — `Heap` and its conformances | Most consumers |
+| `Heap Primitive` | `Heap<Element>` — the binary heap / priority queue | Naming the type directly |
 
-var queue = Queue(column: Store.Inline())
-queue.push(42)
-queue.push(7)
+---
 
-let minimum = queue.min
-let removed = queue.pop()
-```
+## Platform Support
 
-`push` preconditions that the supplied column has available capacity. `pop` returns `nil` when the heap is empty. Elements need only satisfy `Comparison.Protocol` (the atom's `Comparable` ownership seam), so move-only element types are supported.
+| Platform         | CI  | Status       |
+|------------------|-----|--------------|
+| macOS 26         | Yes | Full support |
+| Linux            | Yes | Full support |
+| Windows          | Yes | Full support |
+| iOS/tvOS/watchOS | —   | Supported    |
+| Swift Embedded   | —   | Pending (nightly-toolchain follow-up) |
 
-## Products
+---
 
-The package has exactly three library products:
+## Related Packages
 
-- `Heap` contains the Foundation-free storage-generic core.
-- `Heap Apple Foundation Integration` is the only target that imports Foundation.
-- `Heap Test Support` provides `InlineHeap<Element, capacity>`, a concise alias for test fixtures backed by `Store.Inline`.
+- [`swift-comparison`](https://github.com/swift-molecules/swift-comparison) — the comparison capability `Heap` orders its elements by.
+- [`swift-array`](https://github.com/swift-molecules/swift-array) — the sequential-container sibling.
+- [`swift-graph`](https://github.com/swift-molecules/swift-graph) — a consumer: priority-first traversals use a heap.
 
-## Dependencies
+---
 
-All direct dependencies use their canonical atom homes:
+## Community
 
-- [swift-buffer](https://github.com/swift-atoms/swift-buffer)
-- [swift-comparison](https://github.com/swift-atoms/swift-comparison)
-- [swift-index](https://github.com/swift-atoms/swift-index)
-- [swift-storage](https://github.com/swift-atoms/swift-storage)
-
-The heap algorithm uses Comparison for ordering, Index for typed slots and counts, and Storage for the ledgered column contract. Buffer remains the package's lower-level buffer boundary dependency while concrete storage policy stays outside the heap algorithm.
-
-## Platform posture
-
-The manifest targets Swift 6.4 and the current Apple platform generation. The core contains no Foundation import or platform conditional. Embedded compilation is measured separately because it also depends on the selected toolchain and the Embedded readiness of the dependency closure.
+<!-- BEGIN: discussion -->
+<!-- END: discussion -->
 
 ## License
 

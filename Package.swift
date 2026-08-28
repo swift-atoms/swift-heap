@@ -12,64 +12,128 @@ let package = Package(
         .visionOS(.v27),
     ],
     products: [
-        .library(
-            name: "Heap",
-            targets: ["Heap"]
-        ),
-        .library(
-            name: "Heap Test Support",
-            targets: ["Heap Test Support"]
-        ),
-        .library(
-            name: "Heap Apple Foundation Integration",
-            targets: ["Heap Apple Foundation Integration"]
-        ),
+
+        .library(name: "Heap Primitive", targets: ["Heap Primitive"]),
+        .library(name: "Heap", targets: ["Heap"]),
+
+        .library(name: "Heap Test Support", targets: ["Heap Test Support"]),
+
     ],
     dependencies: [
+
         .package(
-            url: "https://github.com/swift-atoms/swift-buffer.git",
+            url: "https://github.com/swift-molecules/swift-comparison.git",
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-atoms/swift-comparison.git",
+            url: "https://github.com/swift-molecules/swift-index.git",
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-atoms/swift-index.git",
+            url: "https://github.com/swift-molecules/swift-buffer.git",
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-atoms/swift-storage.git",
+            url: "https://github.com/swift-molecules/swift-buffer-linear.git",
+            branch: "main"
+        ),
+        .package(
+            url: "https://github.com/swift-molecules/swift-storage.git",
+            branch: "main"
+        ),
+        .package(
+            url: "https://github.com/swift-molecules/swift-memory-allocation.git",
+            branch: "main"
+        ),
+        .package(
+            url: "https://github.com/swift-molecules/swift-memory-heap.git",
+            branch: "main"
+        ),
+
+        .package(
+            url: "https://github.com/swift-molecules/swift-collection.git",
+            branch: "main"
+        ),
+        .package(
+            url: "https://github.com/swift-molecules/swift-input.git",
+            branch: "main"
+        ),
+        .package(
+            url: "https://github.com/swift-molecules/swift-sequence.git",
             branch: "main"
         ),
     ],
     targets: [
+
+        .target(
+            name: "Heap Primitive",
+            dependencies: [
+
+                .product(name: "Store Protocol", package: "swift-storage"),
+                .product(name: "Buffer Protocol", package: "swift-buffer"),
+
+                .product(name: "Buffer Primitive", package: "swift-buffer"),
+                .product(
+                    name: "Buffer Linear Primitive",
+                    package: "swift-buffer-linear"
+                ),
+                .product(name: "Storage Primitive", package: "swift-storage"),
+                .product(
+                    name: "Storage Contiguous",
+                    package: "swift-storage"
+                ),
+                .product(name: "Memory Heap", package: "swift-memory-heap"),
+
+                .product(
+                    name: "Memory Allocator Primitive",
+                    package: "swift-memory-allocation"
+                ),
+                .product(
+                    name: "Memory Allocator Protocol",
+                    package: "swift-memory-allocation"
+                ),
+
+                .product(name: "Comparison", package: "swift-comparison"),
+                .product(name: "Index", package: "swift-index"),
+            ]
+        ),
+
         .target(
             name: "Heap",
             dependencies: [
-                .product(name: "Buffer", package: "swift-buffer"),
-                .product(name: "Comparison", package: "swift-comparison"),
-                .product(name: "Index", package: "swift-index"),
-                .product(name: "Storage", package: "swift-storage"),
+                "Heap Primitive"
             ]
         ),
-        .target(
-            name: "Heap Test Support",
-            dependencies: ["Heap"]
-        ),
-        .target(
-            name: "Heap Apple Foundation Integration",
-            dependencies: ["Heap"]
-        ),
+
         .testTarget(
             name: "Heap Tests",
             dependencies: [
                 "Heap",
                 "Heap Test Support",
-                .product(name: "Comparison", package: "swift-comparison"),
-                .product(name: "Index", package: "swift-index"),
-                .product(name: "Storage", package: "swift-storage"),
+                .product(name: "Index Test Support", package: "swift-index"),
             ]
+        ),
+
+        .target(
+            name: "Heap Test Support",
+            dependencies: [
+                "Heap",
+                .product(
+                    name: "Buffer Test Support",
+                    package: "swift-buffer"
+                ),
+                .product(name: "Index Test Support", package: "swift-index"),
+                .product(
+                    name: "Collection Test Support",
+                    package: "swift-collection"
+                ),
+                .product(name: "Input Test Support", package: "swift-input"),
+                .product(
+                    name: "Sequence Test Support",
+                    package: "swift-sequence"
+                ),
+            ],
+            path: "Tests/Support"
         ),
     ],
     swiftLanguageModes: [.v6]

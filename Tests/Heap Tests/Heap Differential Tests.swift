@@ -1,8 +1,6 @@
 import Testing
-import Storage
 
 @testable import Heap
-import Heap_Test_Support
 
 private struct SplitMix64: RandomNumberGenerator {
     var state: UInt64
@@ -28,9 +26,9 @@ struct `Heap Differential Tests` {
 
 extension `Heap Differential Tests`.Integration {
     @Test
-    func `600 mixed operations preserve the heap invariant`() {
+    func `600 mixed ops: duplicates, interleaved push, pop, growth across reallocations`() {
         var rng = SplitMix64(seed: 0x5EED_1234_ABCD_0001)
-        var heap = InlineHeap<Int, 512>(column: Store.Inline())
+        var heap = Heap<Int>()
         var oracle: [Int] = []
 
         let totalOps = 600
