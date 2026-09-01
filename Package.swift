@@ -22,15 +22,15 @@ let package = Package(
     dependencies: [
 
         .package(
-            url: "https://github.com/swift-molecules/swift-comparison.git",
+            url: "https://github.com/swift-atoms/swift-comparison.git",
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-molecules/swift-index.git",
+            url: "https://github.com/swift-atoms/swift-index.git",
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-molecules/swift-buffer.git",
+            url: "https://github.com/swift-atoms/swift-buffer.git",
             branch: "main"
         ),
         .package(
@@ -38,7 +38,7 @@ let package = Package(
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-molecules/swift-storage.git",
+            url: "https://github.com/swift-atoms/swift-storage.git",
             branch: "main"
         ),
         .package(
@@ -51,11 +51,11 @@ let package = Package(
         ),
 
         .package(
-            url: "https://github.com/swift-molecules/swift-collection.git",
+            url: "https://github.com/swift-atoms/swift-collection.git",
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-molecules/swift-sequence.git",
+            url: "https://github.com/swift-atoms/swift-sequence.git",
             branch: "main"
         ),
     ],
