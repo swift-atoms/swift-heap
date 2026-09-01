@@ -1,5 +1,5 @@
 @_exported public import Buffer_Linear_Primitive
-@_exported public import Buffer_Primitive
+@_exported public import Buffer
 @_exported public import Buffer_Protocol
 @_exported public import Comparison
 @_exported public import Index

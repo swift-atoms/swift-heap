@@ -72,12 +72,12 @@ let package = Package(
                 .product(name: "Store Protocol", package: "swift-store"),
                 .product(name: "Buffer Protocol", package: "swift-buffer"),
 
-                .product(name: "Buffer Primitive", package: "swift-buffer"),
+                .product(name: "Buffer", package: "swift-buffer"),
                 .product(
                     name: "Buffer Linear Primitive",
                     package: "swift-buffer-linear"
                 ),
-                .product(name: "Storage Primitive", package: "swift-storage"),
+                .product(name: "Storage", package: "swift-storage"),
                 .product(
                     name: "Storage Contiguous",
                     package: "swift-storage"

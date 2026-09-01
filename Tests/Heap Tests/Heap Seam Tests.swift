@@ -1,12 +1,12 @@
 import Buffer_Linear_Primitive
-import Buffer_Primitive
+import Buffer
 import Buffer_Test_Support
 import Heap
 import Index
 import Memory_Allocator
 import Memory_Heap
 import Storage_Contiguous
-import Storage_Primitive
+import Storage
 import Testing
 
 private typealias HeapColumn<E: ~Copyable> =
