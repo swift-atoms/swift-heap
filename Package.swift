@@ -85,7 +85,7 @@ let package = Package(
                 .product(name: "Memory", package: "swift-memory"),
 
                 .product(
-                    name: "Memory Allocator Primitive",
+                    name: "Memory Allocator",
                     package: "swift-memory-allocation"
                 ),
                 .product(

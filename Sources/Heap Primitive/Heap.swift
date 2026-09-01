@@ -3,7 +3,7 @@ public import Buffer_Primitive
 public import Buffer_Protocol
 import Comparison
 public import Index
-public import Memory_Allocator_Primitive
+public import Memory_Allocator
 public import Memory_Allocator_Protocol
 public import Storage_Contiguous
 public import Storage_Primitive
