@@ -5,5 +5,5 @@
 @_exported public import Index
 @_exported public import Memory_Allocator
 @_exported public import Memory
-@_exported public import Storage_Contiguous
+@_exported public import Storage
 @_exported public import Store_Protocol

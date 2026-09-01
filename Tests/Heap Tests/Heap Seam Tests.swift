@@ -5,7 +5,7 @@ import Heap
 import Index
 import Memory_Allocator
 import Memory_Heap
-import Storage_Contiguous
+import Storage
 import Storage
 import Testing
 

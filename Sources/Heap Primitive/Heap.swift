@@ -5,7 +5,7 @@ import Comparison
 public import Index
 public import Memory_Allocator
 public import Memory_Allocator_Protocol
-public import Storage_Contiguous
+public import Storage
 public import Storage
 public import Store_Protocol
 

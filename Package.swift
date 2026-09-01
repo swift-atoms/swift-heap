@@ -78,10 +78,6 @@ let package = Package(
                     package: "swift-buffer-linear"
                 ),
                 .product(name: "Storage", package: "swift-storage"),
-                .product(
-                    name: "Storage Contiguous",
-                    package: "swift-storage"
-                ),
                 .product(name: "Memory", package: "swift-memory"),
 
                 .product(
