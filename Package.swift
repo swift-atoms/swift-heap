@@ -20,6 +20,10 @@ let package = Package(
 
     ],
     dependencies: [
+        .package(
+            url: "https://github.com/swift-atoms/swift-store.git",
+            branch: "main"
+        ),
 
         .package(
             url: "https://github.com/swift-atoms/swift-comparison.git",
@@ -65,7 +69,7 @@ let package = Package(
             name: "Heap Primitive",
             dependencies: [
 
-                .product(name: "Store Protocol", package: "swift-storage"),
+                .product(name: "Store Protocol", package: "swift-store"),
                 .product(name: "Buffer Protocol", package: "swift-buffer"),
 
                 .product(name: "Buffer Primitive", package: "swift-buffer"),
