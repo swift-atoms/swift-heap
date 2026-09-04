@@ -4,7 +4,7 @@ import Buffer_Test_Support
 import Heap
 import Index
 import Memory_Allocator
-import Memory_Heap
+import Memory
 import Storage
 import Storage
 import Testing
