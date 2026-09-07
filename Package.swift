@@ -69,10 +69,9 @@ let package = Package(
             name: "Heap Primitive",
             dependencies: [
 
-                .product(name: "Store Protocol", package: "swift-store"),
-                .product(name: "Buffer Protocol", package: "swift-buffer"),
-
+                .product(name: "Store", package: "swift-store"),
                 .product(name: "Buffer", package: "swift-buffer"),
+
                 .product(
                     name: "Buffer Linear Primitive",
                     package: "swift-buffer-linear"

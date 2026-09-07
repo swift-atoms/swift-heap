@@ -6,7 +6,6 @@ import Index
 import Memory_Allocator
 import Memory
 import Storage
-import Storage
 import Testing
 
 private typealias HeapColumn<E: ~Copyable> =
