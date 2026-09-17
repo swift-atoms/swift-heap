@@ -1,10 +1,9 @@
-import Comparison
 import Index
 import Testing
 
 @testable import Heap
 
-private struct Job: ~Copyable, Comparison.`Protocol` {
+private struct Job: ~Copyable, Swift.Comparable {
     let priority: Int
     init(_ priority: Int) { self.priority = priority }
 }

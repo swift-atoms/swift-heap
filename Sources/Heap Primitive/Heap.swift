@@ -1,6 +1,5 @@
 public import Buffer_Linear_Primitive
 public import Buffer
-import Comparison
 public import Index
 public import Memory_Allocator
 public import Memory_Allocator_Protocol
@@ -45,7 +44,7 @@ extension __Heap
 where
     S: ~Copyable,
     S: Store.`Protocol` & Buffer.`Protocol`,
-    S.Element: Comparison.`Protocol`
+    S.Element: Swift.Comparable
 {
 
     @inlinable
@@ -109,7 +108,7 @@ extension __Heap where S: ~Copyable {
 
     @inlinable
     public mutating func push<
-        E: ~Copyable & Comparison.`Protocol`,
+        E: ~Copyable & Swift.Comparable,
         Resource: Memory.Growable & ~Copyable
     >(
         _ element: consuming E

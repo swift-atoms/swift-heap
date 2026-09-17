@@ -26,10 +26,6 @@ let package = Package(
         ),
 
         .package(
-            url: "https://github.com/swift-atoms/swift-comparison.git",
-            branch: "main"
-        ),
-        .package(
             url: "https://github.com/swift-atoms/swift-index.git",
             branch: "main"
         ),
@@ -88,7 +84,6 @@ let package = Package(
                     package: "swift-memory-allocation"
                 ),
 
-                .product(name: "Comparison", package: "swift-comparison"),
                 .product(name: "Index", package: "swift-index"),
             ]
         ),
