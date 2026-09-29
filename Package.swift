@@ -40,7 +40,7 @@ let package = Package(
         .package(
             url: "https://github.com/swift-atoms/swift-storage.git",
             branch: "main"
-        ),
+        , traits: ["Memory"]),
         .package(
             url: "https://github.com/swift-molecules/swift-memory-allocation.git",
             branch: "main"
@@ -58,6 +58,10 @@ let package = Package(
             url: "https://github.com/swift-atoms/swift-sequence.git",
             branch: "main"
         ),
+
+        .package(url: "https://github.com/swift-atoms/swift-cardinal.git", branch: "main"),
+        .package(url: "https://github.com/swift-atoms/swift-ordinal.git", branch: "main"),
+        .package(url: "https://github.com/swift-atoms/swift-tagged.git", branch: "main"),
     ],
     targets: [
 
@@ -124,6 +128,8 @@ let package = Package(
             ],
             path: "Tests/Support"
         ),
+
+        .testTarget(name: "Decision Heap Integration Tests", dependencies: ["Heap", .product(name: "Cardinal", package: "swift-cardinal"), .product(name: "Ordinal", package: "swift-ordinal"), .product(name: "Tagged", package: "swift-tagged"), .product(name: "Index", package: "swift-index"), .product(name: "Storage", package: "swift-storage"), .product(name: "Store", package: "swift-store"), .product(name: "Buffer", package: "swift-buffer")], path: "Tests/Decision Heap Integration Tests"),
     ],
     swiftLanguageModes: [.v6]
 )
