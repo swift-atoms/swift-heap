@@ -95,15 +95,15 @@ let package = Package(
         .target(
             name: "Heap",
             dependencies: [
-                "Heap Primitive"
+                .target(name: "Heap Primitive")
             ]
         ),
 
         .testTarget(
             name: "Heap Tests",
             dependencies: [
-                "Heap",
-                "Heap Test Support",
+                .target(name: "Heap"),
+                .target(name: "Heap Test Support"),
                 .product(name: "Index Test Support", package: "swift-index"),
             ]
         ),
@@ -111,7 +111,7 @@ let package = Package(
         .target(
             name: "Heap Test Support",
             dependencies: [
-                "Heap",
+                .target(name: "Heap"),
                 .product(
                     name: "Buffer Test Support",
                     package: "swift-buffer"
@@ -129,23 +129,20 @@ let package = Package(
             path: "Tests/Support"
         ),
 
-        .testTarget(name: "Decision Heap Integration Tests", dependencies: ["Heap", .product(name: "Cardinal", package: "swift-cardinal"), .product(name: "Ordinal", package: "swift-ordinal"), .product(name: "Tagged", package: "swift-tagged"), .product(name: "Index", package: "swift-index"), .product(name: "Storage", package: "swift-storage"), .product(name: "Store", package: "swift-store"), .product(name: "Buffer", package: "swift-buffer")], path: "Tests/Decision Heap Integration Tests"),
+        .testTarget(name: "Decision Heap Integration Tests", dependencies: [.target(name: "Heap"), .product(name: "Cardinal", package: "swift-cardinal"), .product(name: "Ordinal", package: "swift-ordinal"), .product(name: "Tagged", package: "swift-tagged"), .product(name: "Index", package: "swift-index"), .product(name: "Storage", package: "swift-storage"), .product(name: "Store", package: "swift-store"), .product(name: "Buffer", package: "swift-buffer")], path: "Tests/Decision Heap Integration Tests"),
     ],
     swiftLanguageModes: [.v6]
 )
 
 for target in package.targets where ![.system, .binary, .plugin, .macro].contains(target.type) {
-    let ecosystem: [SwiftSetting] = [
+    target.swiftSettings = (target.swiftSettings ?? []) + [
         .strictMemorySafety(),
         .enableUpcomingFeature("ExistentialAny"),
         .enableUpcomingFeature("InternalImportsByDefault"),
         .enableUpcomingFeature("MemberImportVisibility"),
         .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
-        .enableExperimentalFeature("Lifetimes"),
         .enableUpcomingFeature("InferIsolatedConformances"),
+        .enableExperimentalFeature("Lifetimes"),
+        .treatAllWarnings(as: .error),
     ]
-
-    let package: [SwiftSetting] = []
-
-    target.swiftSettings = (target.swiftSettings ?? []) + ecosystem + package
 }

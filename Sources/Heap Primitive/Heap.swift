@@ -44,7 +44,7 @@ extension __Heap
 where
     S: ~Copyable,
     S: Store.`Protocol` & Buffer.`Protocol`,
-    S.Element: Swift.Comparable
+    S.Element: Swift::Comparable
 {
 
     @inlinable
@@ -108,7 +108,7 @@ extension __Heap where S: ~Copyable {
 
     @inlinable
     public mutating func push<
-        E: ~Copyable & Swift.Comparable,
+        E: ~Copyable & Swift::Comparable,
         Resource: Memory.Growable & ~Copyable
     >(
         _ element: consuming E
