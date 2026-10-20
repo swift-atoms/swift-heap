@@ -1,5 +1,5 @@
-public import Buffer_Linear_Primitive
 public import Buffer
+public import Buffer_Linear_Primitive
 public import Index
 public import Memory_Allocator
 public import Memory_Allocator_Protocol
