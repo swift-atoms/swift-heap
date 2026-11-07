@@ -11,16 +11,14 @@ import Testing
 private typealias HeapColumn<E: ~Copyable> =
     Buffer<Storage<Memory.Allocator<Memory.Heap>>.Contiguous<E>>.Linear
 
-extension `Heap Seam Tests`.`Heap Seam Tests` {
-    @Suite
-    struct `Heap Seam Tests` {
-        @Suite struct Unit {}
-        @Suite struct `Edge Case` {}
-        @Suite struct Integration {}
-    }
+@Suite
+struct `Heap Seam Tests` {
+    @Suite struct Unit {}
+    @Suite struct `Edge Case` {}
+    @Suite struct Integration {}
 }
 
-extension `Heap Seam Tests`.`Heap Seam Tests`.Integration {
+extension `Heap Seam Tests`.Integration {
     @Test
     func `DS-024 Seam Ledger laws hold for the canonical Heap column`() {
         let violations = Seam.Ledger.violations(
