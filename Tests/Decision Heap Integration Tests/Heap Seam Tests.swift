@@ -3,14 +3,16 @@ import Heap
 import Tagged
 import Testing
 
-@Suite
-struct `Heap Seam Tests` {
-    @Suite struct Unit {}
-    @Suite struct `Edge Case` {}
-    @Suite struct Integration {}
+extension `Heap Seam Tests`.`Heap Seam Tests` {
+    @Suite
+    struct `Heap Seam Tests` {
+        @Suite struct Unit {}
+        @Suite struct `Edge Case` {}
+        @Suite struct Integration {}
+    }
 }
 
-extension `Heap Seam Tests`.Integration {
+extension `Heap Seam Tests`.`Heap Seam Tests`.Integration {
     @Test
     func `canonical front door uses the growable linear column`() {
         let capacity = Tagged<Int, Cardinal>(_unchecked: Cardinal(UInt(4)))
