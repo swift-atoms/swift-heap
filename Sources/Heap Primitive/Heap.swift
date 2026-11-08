@@ -58,7 +58,7 @@ where
     }
 
     @inlinable
-    package mutating func siftUp(from k: Int) {
+    mutating func siftUp(from k: Int) {
         var child = k
         while child > 0 {
             let parent = (child - 1) / 2
@@ -69,7 +69,7 @@ where
     }
 
     @inlinable
-    package mutating func siftDown(over n: Int) {
+    mutating func siftDown(over n: Int) {
         var parent = 0
         while true {
             let l = 2 * parent + 1
