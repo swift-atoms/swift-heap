@@ -94,6 +94,14 @@ extension `Heap Tests`.Unit {
 
 extension `Heap Tests`.`Edge Case` {
     @Test
+    func `min on an empty heap stops at its precondition`() async {
+        await #expect(processExitsWith: .failure) {
+            let heap = Heap<Int>()
+            _ = heap.min
+        }
+    }
+
+    @Test
     func `single element heap: push, min, pop`() {
         var heap = Heap<Int>()
         heap.push(17)

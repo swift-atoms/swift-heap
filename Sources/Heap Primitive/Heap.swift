@@ -36,7 +36,10 @@ extension __Heap where S: ~Copyable, S: Store.`Protocol` & Buffer.`Protocol` {
 
     @inlinable
     public var min: S.Element {
-        _read { yield column[0] }
+        _read {
+            precondition(!column.isEmpty, "min requires a non-empty heap")
+            yield column[0]
+        }
     }
 }
 
